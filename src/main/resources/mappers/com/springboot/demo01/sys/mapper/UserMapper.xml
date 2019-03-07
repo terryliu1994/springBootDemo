@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.demo01.sys.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.springboot.demo01.sys.dto.User">
+        <id column="user_id" jdbcType="DECIMAL" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      delete from user
+      where user_id = #{userId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.springboot.demo01.sys.dto.User"
+            useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId">
+
+        insert into user (user_name, password)
+        values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR} )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.springboot.demo01.sys.dto.User">
+        update user
+        set user_name = #{userName,jdbcType=VARCHAR},
+          password = #{password,jdbcType=VARCHAR}
+        where user_id = #{userId,jdbcType=DECIMAL}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select user_id, user_name, password
+        from user
+        where user_id = #{userId,jdbcType=DECIMAL}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+      select user_id, user_name, password
+      from user
+    </select>
+
+    <select id="select" parameterType="com.springboot.demo01.sys.dto.User" resultMap="BaseResultMap">
+        select * from user su
+        <where>
+            <if test="userId != null">
+                AND su.user_id = #{userId}
+            </if>
+            <if test="userName != null">
+                AND su.user_name = #{userName}
+            </if>
+            <if test="password != null">
+                AND su.password = #{password}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUserByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from user su
+        where  UPPER(su.user_name) = upper(#{userName})
+    </select>
+</mapper>

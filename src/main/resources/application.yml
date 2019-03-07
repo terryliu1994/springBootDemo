@@ -1,0 +1,95 @@
+spring:
+  profiles:
+    active: dev
+  # 数据源
+  datasource:
+    url: jdbc:mysql://192.168.217.129:3306/demo01
+    username: terry
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  mvc:
+    favicon:
+      enabled: true
+  # 设置国际化语言包路径
+  messages:
+    basename: i18n.massage
+  # redis
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+  security:
+    filter:
+      # SpringSecurity 默认只启用REQUEST,ASYNC,ERROR
+      dispatcher-types: FORWARD,INCLUDE,REQUEST,ASYNC,ERROR
+  # 静态资源
+#  resources:
+#     默认路径参考源码配置类 ResourceProperties
+#     classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/static/", "classpath:/public/"
+#    static-locations:
+#      - classpath:/META-INF/resources/
+#      - classpath:/resources/
+#      - classpath:/static/
+#      - classpath:/public/
+mybatis:
+  #设置mybatis的mapper和model扫描路径
+  mapper-locations: classpath*:/**/mapper/*Mapper.xml
+  config-location: classpath:mybatis-config.xml
+
+pagehelper:
+  # 指明数据库方言 4.0.0以后不需要设置此属性
+  helper-dialect: mysql
+  #合理化,页码<=0 查询第一页，页码>=总页数查询最后一页
+  reasonable: true
+  #支持通过 Mapper 接口参数来传递分页参数
+  support-methods-arguments: true
+  params: count=countSql
+
+server:
+  servlet:
+    context-path: /demo01
+
+---
+# dev配置
+spring:
+  profiles: dev
+  thymeleaf:
+    # 禁用缓存 实时生效
+    cache: false
+server:
+  port: 8081
+
+# 日志 若logback.xml文件存在，相同配置若logback优先级更高
+logging:
+  # level:
+    # 指定包的日志级别
+    # com.springboot.demo01: debug
+  pattern:
+    # 控制台日志格式
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] [%X{sessionId}] %logger{50} - %msg%n"
+
+# 自定义配置
+person:
+  name: terry
+  age: 25
+  # 数组格式
+  members:
+    - liling
+    - zhangxiaolong
+    - yuanhongshuai
+    - zhangzz
+    - zhangzhiwei
+    - pengzhihengs
+---
+# sit配置
+spring:
+  profiles: sit
+server:
+  port: 8081
+
+---
+# prd配置
+spring:
+  profiles: prd
+server:
+  port: 8082
